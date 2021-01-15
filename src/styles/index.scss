@@ -1,7 +1,23 @@
-@font-face {
-  font-family: 'Montserrat';
-  src: url('../fonts/Montserrat-Regular.ttf');
-}
+// @font-face {
+//   font-family: 'Montserrat';
+//   src: url('../fonts/Montserrat-Regular.ttf');
+// }
 
-@import 'variables';
-@import 'scaffolding';
+// @import 'variables';
+// @import 'scaffolding';
+
+*{
+    box-sizing: border-box;
+}
+html, body {
+    padding: 0;
+    margin: 0;
+    height: 99.9vh;
+    width: 100%;
+    overflow:  hidden;
+}
+canvas {
+    height: 100%;
+    width: 100%;
+    border: 1px solid red;
+}
