@@ -1,52 +1,52 @@
-import  PointInPolygon from '../math/points';
+import { PointInPolygon } from '../math/points';
 
 export default class Polygon {
-    constructor(number, ...points) {
+    constructor(id, points) {
         this.points = points;
-        this.number = number;
+        this.id = id;
         this.intersections = [];
-        this.color = false;
+        this._isIntersected = false;
     }
 
-    activeFigure(canvas, active) {
-        if (this.number === active.number) {
-            this.color = false;
-        }
-        canvas.beginPath();
-        if (this.color && this.intersections.length > 0) {
-            canvas.moveTo(this.points[this.points.length - 1].x, this.points[this.points.length - 1].y);
-            this.points.forEach(n => canvas.lineTo(n.x, n.y));
-            canvas.fill();
-            canvas.stroke();
-        } else {
-            canvas.moveTo(this.points[this.points.length - 1].x, this.points[this.points.length - 1].y);
-            this.points.forEach(n => canvas.lineTo(n.x, n.y));
-            canvas.stroke();
-        }
-    }
-    draw(canvas, active) {
-        if (active) {
-            this.color = true;
-        }
-        if (this.intersections.length == 0) {
-            this.color = false;
-        }
-        
-        canvas.beginPath();
-        if (active || this.color) {
-            canvas.moveTo(this.points[this.points.length - 1].x, this.points[this.points.length - 1].y);
-            this.points.forEach(n => canvas.lineTo(n.x, n.y));
-            canvas.fill();
-            canvas.stroke();
-
-        } else {
-            canvas.moveTo(this.points[this.points.length - 1].x, this.points[this.points.length - 1].y);
-            this.points.forEach(n => canvas.lineTo(n.x, n.y));
-            canvas.stroke();
+    draw(ctx) {
+        if (this.intersections.length !== 0) {
+            this._isIntersected = true;
         }
 
+        ctx.beginPath();
+        ctx.moveTo(this.points[this.points.length - 1].x, this.points[this.points.length - 1].y);
+        this.points.forEach(n => ctx.lineTo(n.x, n.y));
+        ctx.fillStyle = this.getFillStroke();
+        ctx.fill();
+        ctx.stroke();
+
     }
+
+    getFillStroke() {
+        if (this._isIntersected) {
+            return '#FF0000';
+        }
+
+        return "#FFFFFF";
+    }
+
     mouseIn(mouse) {
-        return PointInPolygon(mouse, ...this.points)
+        return PointInPolygon(mouse, ...this.points);
+    }
+
+    addFigure(id) {
+        if (this.intersections.indexOf(id) === -1) {
+            this.intersections.push(id);
+            this._isIntersected = true;
+        }
+    }
+
+    deleteFigure(id) {
+        const index = this.intersections.indexOf(id);
+
+        if (this.intersections.indexOf(id) > -1) {
+            this.intersections.splice(index, 1);
+            this._isIntersected = false;
+        }
     }
 }

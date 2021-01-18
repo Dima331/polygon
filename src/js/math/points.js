@@ -1,17 +1,15 @@
-export default function PointInPolygon(pointMouse, ...vectors) {
-    let entry = [];
+export function PointInPolygon(pointMouse, ...vectors) {
+    const entry = [];
 
-    for (let i = 0; i < vectors.length; i++) {
-        if (i == vectors.length - 1) {
-            entry.push(calculateVectorClick(pointMouse, vectors[i], vectors[0]) < 0);
+    vectors.forEach((vector, i) => {
+        if (i === vectors.length - 1) {
+            entry.push(calculateVectorClick(pointMouse, vector, vectors[0]) < 0);
         } else {
-            entry.push(calculateVectorClick(pointMouse, vectors[i], vectors[i + 1]) < 0);
+            entry.push(calculateVectorClick(pointMouse, vector, vectors[i + 1]) < 0);
         }
-    }
+    })
 
-    let count = entry.filter(value => { return value });
-
-    return vectors.length == count.length;
+    return vectors.length === entry.filter(value => value).length;
 }
 
 export function calculateVectorClick(p1, p2, p3) {

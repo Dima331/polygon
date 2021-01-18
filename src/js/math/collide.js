@@ -1,45 +1,40 @@
-export function convexPolygonsCollide(a, b) {
-    let polygons = [a, b];
-    let minA, maxA, projected, minB, maxB;
+export function convexPolygonsCollide(shape1, shape2) {
+    const polygons = [shape1, shape2];
 
-    for (let i = 0; i < polygons.length; i++) {
-        let polygon = polygons[i];
-        
-        for (let i1 = 0; i1 < polygon.length; i1++) {
-            let i2 = (i1 + 1) % polygon.length;
-            let p1 = polygon[i1];
-            let p2 = polygon[i2];
-            let normal = { 
-                x: p2.y - p1.y, 
-                y: p1.x - p2.x 
+    return polygons.every(polygon => {
+        for (let i = 0; i < polygon.length; i++) {
+            const i2 = (i + 1) % polygon.length;
+            const coordinate1 = polygon[i];
+            const coordinate2 = polygon[i2];
+
+            const normal = {
+                x: coordinate2.y - coordinate1.y,
+                y: coordinate1.x - coordinate2.x
             };
-            minA = maxA = undefined;
-            minB = maxB = undefined;
-            
-            for (let j = 0; j < a.length; j++) {
-                projected = normal.x * a[j].x + normal.y * a[j].y;
-                if (minA == undefined || projected < minA) {
-                    minA = projected;
-                }
-                if (maxA == undefined || projected > maxA) {
-                    maxA = projected;
-                }
-            }
-            
-            for (let j = 0; j < b.length; j++) {
-                projected = normal.x * b[j].x + normal.y * b[j].y;
-                if (minB == undefined || projected < minB) {
-                    minB = projected;
-                }
-                if (maxB == undefined || projected > maxB) {
-                    maxB = projected;
-                }
-            }
 
-            if (maxA < minB || maxB < minA) {
+            const side1 = countCollide(normal, shape1);
+            const side2 = countCollide(normal, shape2);
+
+            if (side1[1] < side2[0] || side2[1] < side1[0]) {
                 return false;
             }
         }
-    }
-    return true;
+        return true;
+    });
 };
+
+function countCollide(normal, shape) {
+    let min, max, projected;
+
+    shape.forEach(coordinate => {
+        projected = normal.x * coordinate.x + normal.y * coordinate.y;
+        if (min === undefined || projected < min) {
+            min = projected;
+        }
+        if (max === undefined || projected > max) {
+            max = projected;
+        }
+    });
+
+    return [min, max];
+}
