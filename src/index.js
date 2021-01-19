@@ -1,66 +1,60 @@
 import './styles/index.scss';
-import { convexPolygonsCollide } from './js/math/collide';
+import { getCrossPolygon } from './js/helpers/CrossPolygonHelper';
 import MouseService from './js/service/MouseService'
-import SelectedPolygonService from './js/service/SelectedPolygonService'
+import SelectedPoligonService from './js/service/SelectedPoligonService'
 import PolygonService from './js/service/PolygonService'
-
 
 window.onload = function () {
   const canvas = document.getElementById('canvas');
   const ctx = canvas.getContext('2d');
+
   canvas.setAttribute('height', window.innerHeight);
   canvas.setAttribute('width', window.innerWidth);
-  ctx.fillStyle = 'red';
 
-  const mouse = new MouseService(0, 0);
-  const selected = new SelectedPolygonService();
-  const polygons = new PolygonService();
-  const shapes = polygons.initializeFigures();
+  const mouseService = new MouseService(0, 0);
+  const selectedPoligonService = new SelectedPoligonService();
+  const polygonService = new PolygonService();
+  const polygons = polygonService.initializePolygons();
 
-  polygons.drawAll(ctx, shapes);
+  polygonService.drawAll(polygons, canvas, ctx);
 
   window.onmousemove = function (e) {
-    mouse.coordinateX = e.pageX - canvas.offsetLeft;
-    mouse.coordinateY = e.pageY - canvas.offsetTop;
+    mouseService.setCoordinate(e.pageX - canvas.offsetLeft, e.pageY - canvas.offsetTop)
 
-    if (selected.selectedPolygon) {
-      selected.selectedPolygon.points.forEach(shape => {
-        shape.x += e.movementX;
-        shape.y += e.movementY;
-      })
+    if (selectedPoligonService.selectedPolygon) {
+      selectedPoligonService.selectedPolygon.move(e.movementX, e.movementY);
 
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      polygons.drawAll(ctx, shapes);
+      polygonService.drawAll(polygons, canvas, ctx);
     }
   };
 
   window.onmouseup = function () {
-    if (selected.selectedPolygon) {
-        shapes.forEach((shape, key) => { 
-        if (selected.selectedPolygon.id === shape.id) {
+    if (selectedPoligonService.selectedPolygon) {
+      polygons.forEach((shape, key) => {
+        if (selectedPoligonService.selectedPolygon.id === shape.id) {
           return;
         }
 
-        if (convexPolygonsCollide([...shape.points], [...selected.selectedPolygon.points])) {
-          shape.addFigure(selected.selectedPolygon.id);
-          selected.selectedPolygon.addFigure(key);
+        if (getCrossPolygon(shape.points, selectedPoligonService.selectedPolygon.points)) { ///
+          shape.addIntersection(selectedPoligonService.selectedPolygon.id);
+          selectedPoligonService.selectedPolygon.addIntersection(key);
         } else {
-          shape.deleteFigure(selected.selectedPolygon.id);
-          selected.selectedPolygon.deleteFigure(key);
+          shape.deleteIntersection(selectedPoligonService.selectedPolygon.id);
+          selectedPoligonService.selectedPolygon.deleteIntersection(key);
         }
       })
     }
 
-    ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-    polygons.drawAll(ctx, shapes);
-    selected.removeSelectedPolygon();
+    polygonService.drawAll(polygons, canvas, ctx);
+
+    selectedPoligonService.removeSelectedPolygon();
   };
 
   window.onmousedown = function () {
-    if (!selected.selectedPolygon) {
-      shapes.forEach(shape => {
-        if (shape.mouseIn(mouse.coordinate)) {
-          selected.selectedPolygon = shape;
+    if (!selectedPoligonService.selectedPolygon) {
+      polygons.forEach(shape => {
+        if (shape.isPointInPolygon(mouseService.getCoordinate())) {
+          selectedPoligonService.selectedPolygon = shape;
         }
       });
     }

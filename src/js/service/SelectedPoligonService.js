@@ -2,6 +2,7 @@ export default class SelectedPolygonService {
     constructor() {
         this._isPolygonSelected = false;
         this._selectedPolygon = null;
+        this._points = [];
     }
 
     get selectedPolygon() {

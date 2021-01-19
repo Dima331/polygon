@@ -1,4 +1,4 @@
-import { calculateVectorDraw } from './vectors';
+import { calculateVectorDraw } from './GetVectorHelper';
 
 export function connectingPoints(dots, numberOfCorner) {
     let minI = 0;
@@ -33,4 +33,20 @@ export function connectingPoints(dots, numberOfCorner) {
     }
 
     return numberOfCorner;
+}
+
+export function getCoordinates(pointsOfPolygon, dots, indent) {
+    const figure = [];
+
+    const DEFAULT_TOP_INDENT = 200;
+    const DEFAULT_LEFT_INDENT = 300;
+
+    pointsOfPolygon.forEach(point => {
+        figure.push({
+            'x': (indent + DEFAULT_LEFT_INDENT) + dots[point].x,
+            'y': DEFAULT_TOP_INDENT - dots[point].y
+        });
+    });
+
+    return figure;
 }
