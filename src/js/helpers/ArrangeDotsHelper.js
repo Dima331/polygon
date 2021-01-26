@@ -39,7 +39,7 @@ export function getCoordinates(pointsOfPolygon, dots, indent) {
     const figure = [];
 
     const DEFAULT_TOP_INDENT = 200;
-    const DEFAULT_LEFT_INDENT = 300;
+    const DEFAULT_LEFT_INDENT = 200;
 
     pointsOfPolygon.forEach(point => {
         figure.push({

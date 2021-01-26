@@ -17,8 +17,9 @@ export default class PolygonService {
             const numberOfCorner = initializeCorners(form);
             const pointsOfPolygon = connectingPoints(dots, numberOfCorner);
             const figure = getCoordinates(pointsOfPolygon, dots, indent);
+            const staticPoints = JSON.parse(JSON.stringify(figure));
 
-            polygons.push(new Polygon(index, figure));
+            polygons.push(new Polygon(index, figure, staticPoints));
 
             return indent += INDENT;
         }, 0)

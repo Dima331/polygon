@@ -1,30 +1,21 @@
 export function initializeDots() {
     const dots = [];
 
+    const height = getRandomDot(1, 30);
+    const width = getRandomDot(20, 50);
+
     dots.push({
-        x: getRandomDot(-50, -40),
-        y: getRandomDot(-50, -40)
+        x: getRandomDot(-50, -50),
+        y: getRandomDot(-height, -height)
     }, {
-        x: getRandomDot(-55, -45),
-        y: getRandomDot(5, 1)
+        x: getRandomDot(width, width),
+        y: getRandomDot(-height, -height)
     }, {
-        x: getRandomDot(5, 1),
-        y: getRandomDot(50, 40)
+        x: getRandomDot(width, width),
+        y: getRandomDot(50, 50)
     }, {
-        x: getRandomDot(35, 25),
-        y: getRandomDot(35, 25)
-    }, {
-        x: getRandomDot(-50, -40),
-        y: getRandomDot(50, 40)
-    }, {
-        x: getRandomDot(50, 40),
-        y: getRandomDot(5, 1)
-    }, {
-        x: getRandomDot(50, 40),
-        y: getRandomDot(-50, -40)
-    }, {
-        x: getRandomDot(5, 1),
-        y: getRandomDot(-70, -60)
+        x: getRandomDot(-50, -50),
+        y: getRandomDot(50, 50)
     })
 
     return dots;
