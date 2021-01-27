@@ -8,7 +8,7 @@ export function getWidth(shape) {
   return shape.points[1].x - shape.points[0].x;
 }
 
-export function getCrossLeft(firstRectangle, secondRectangle) {
+export function isCrossLeft(firstRectangle, secondRectangle) {
   if (firstRectangle.points[3].x > secondRectangle.points[2].x
     && firstRectangle.points[3].y < secondRectangle.points[1].y
     && firstRectangle.points[0].y > secondRectangle.points[2].y
@@ -19,7 +19,7 @@ export function getCrossLeft(firstRectangle, secondRectangle) {
   return false;
 }
 
-export function getCrossRight(firstRectangle, secondRectangle) {
+export function isCrossRight(firstRectangle, secondRectangle) {
   if (firstRectangle.points[2].x < secondRectangle.points[3].x
     && firstRectangle.points[2].y < secondRectangle.points[0].y
     && firstRectangle.points[1].y > secondRectangle.points[3].y
@@ -30,7 +30,7 @@ export function getCrossRight(firstRectangle, secondRectangle) {
   return false;
 }
 
-export function getCrossTop(firstRectangle, secondRectangle) {
+export function isCrossTop(firstRectangle, secondRectangle) {
   if (firstRectangle.points[0].y < secondRectangle.points[3].y
     && firstRectangle.points[3].x < secondRectangle.points[1].x
     && firstRectangle.points[2].x > secondRectangle.points[0].x
@@ -41,7 +41,7 @@ export function getCrossTop(firstRectangle, secondRectangle) {
   return false;
 }
 
-export function getCrossBottom(firstRectangle, secondRectangle) {
+export function isCrossBottom(firstRectangle, secondRectangle) {
   if (firstRectangle.points[3].y > secondRectangle.points[0].y
     && firstRectangle.points[3].x < secondRectangle.points[1].x
     && firstRectangle.points[2].x > secondRectangle.points[0].x

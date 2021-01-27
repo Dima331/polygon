@@ -30,14 +30,14 @@ export default class MouseService {
         this.staticY = 0;
     }
 
-    blockMove() {
-        if (this.staticX > MOUSE_BLOCK 
+    isBlockMove() {
+        if (this.staticX > MOUSE_BLOCK
             || this.staticX < -MOUSE_BLOCK
-            || this.staticY > MOUSE_BLOCK 
+            || this.staticY > MOUSE_BLOCK
             || this.staticY < -MOUSE_BLOCK) {
-            return true;
+            return false;
         }
 
-        return false
+        return true
     }
 }

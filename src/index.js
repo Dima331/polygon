@@ -3,10 +3,10 @@ import { getCrossPolygon } from './js/helpers/CrossPolygonHelper';
 import MouseService from './js/service/MouseService'
 import SelectedPoligonService from './js/service/SelectedPoligonService'
 import PolygonService from './js/service/PolygonService'
-import { getCrossBottom } from './js/helpers/ShiftShapeHelper';
-import { getCrossRight } from './js/helpers/ShiftShapeHelper';
-import { getCrossTop } from './js/helpers/ShiftShapeHelper';
-import { getCrossLeft } from './js/helpers/ShiftShapeHelper';
+import { isCrossBottom } from './js/helpers/ShiftShapeHelper';
+import { isCrossRight } from './js/helpers/ShiftShapeHelper';
+import { isCrossTop } from './js/helpers/ShiftShapeHelper';
+import { isCrossLeft } from './js/helpers/ShiftShapeHelper';
 
 window.onload = function () {
   const canvas = document.getElementById('canvas');
@@ -30,7 +30,7 @@ window.onload = function () {
       if (selectedPoligonService.selectedPolygon.merger.length !== 0) {
         mouseService.saveStaticCoordinate(e.movementX, e.movementY);
 
-        if (mouseService.blockMove()) {
+        if (!mouseService.isBlockMove()) {
           selectedPoligonService.selectedPolygon.move(mouseService.staticX, mouseService.staticY);
 
           polygons.forEach((shape) => {
@@ -76,7 +76,7 @@ window.onload = function () {
       const moveRight = {};
       const moveTop = {};
       const moveLeft = {};
-      let reboot = false;
+      let resetСoordinate = false;
 
       polygons.forEach((shape, key) => {
         if (selectedPoligonService.selectedPolygon.id === shape.id) {
@@ -86,33 +86,33 @@ window.onload = function () {
         if (selectedPoligonService.selectedPolygon.intersections.length !== 0) {
           shape.deleteIntersection(selectedPoligonService.selectedPolygon.id);
           selectedPoligonService.selectedPolygon.deleteIntersection(key);
-          selectedPoligonService.selectedPolygon.rebootPoints();
-          reboot = true;
+          selectedPoligonService.selectedPolygon.resetPoints();
+          resetСoordinate = true;
         }
 
-        if (!reboot) {
-          if (getCrossBottom(shape, selectedPoligonService.selectedPolygon)) {
+        if (!resetСoordinate) {
+          if (isCrossBottom(shape, selectedPoligonService.selectedPolygon)) {
             if (!moveBottom.distance || moveBottom.distance > shape.points[2].y) {
               moveBottom.distance = shape.points[2].y;
               moveBottom.key = key;
             }
           }
 
-          if (getCrossRight(shape, selectedPoligonService.selectedPolygon)) {
+          if (isCrossRight(shape, selectedPoligonService.selectedPolygon)) {
             if (!moveRight.distance || moveRight.distance > shape.points[2].x) {
               moveRight.distance = shape.points[2].x;
               moveRight.key = key;
             }
           }
 
-          if (getCrossTop(shape, selectedPoligonService.selectedPolygon)) {
+          if (isCrossTop(shape, selectedPoligonService.selectedPolygon)) {
             if (!moveTop.distance || moveTop.distance < shape.points[0].y) {
               moveTop.distance = shape.points[0].y;
               moveTop.key = key;
             }
           }
 
-          if (getCrossLeft(shape, selectedPoligonService.selectedPolygon)) {
+          if (isCrossLeft(shape, selectedPoligonService.selectedPolygon)) {
             if (!moveLeft.distance || moveLeft.distance < shape.points[0].x) {
               moveLeft.distance = shape.points[0].x;
               moveLeft.key = key;
@@ -120,8 +120,8 @@ window.onload = function () {
           }
         }
       });
-      
-      if (!reboot) {
+
+      if (!resetСoordinate) {
         if (moveBottom.distance) {
           selectedPoligonService.selectedPolygon.addMerger(polygons[moveBottom.key].id);
           polygons[moveBottom.key].addMerger(selectedPoligonService.selectedPolygon.id);

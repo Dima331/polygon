@@ -1,7 +1,4 @@
 import { calculateVectorClick } from '../helpers/GetVectorHelper';
-import { getHeight } from '../helpers/ShiftShapeHelper';
-import { getWidth } from '../helpers/ShiftShapeHelper';
-
 
 export default class Polygon {
   constructor(id, points, staticPoints) {
@@ -78,8 +75,6 @@ export default class Polygon {
     }
   }
 
-
-
   move(dx, dy) {
     this.points.forEach((point) => {
       point.x += dx;
@@ -87,59 +82,7 @@ export default class Polygon {
     })
   }
 
-  rebootPoints() {
+  resetPoints() {
     this.points = JSON.parse(JSON.stringify(this._staticPoints));
-  }
-
-  moveTop(distance) {
-    const height = getHeight(this);
-
-    distance += 1;
-
-    this.points[3].y = distance; 
-    this.points[2].y = distance; 
-    this.points[0].y = distance + height;
-    this.points[1].y = distance + height;
-
-    this.attached = true;
-  }
-
-  moveBottom(distance) {
-    const height = getHeight(this);
-
-    distance -= 1;
-
-    this.points[0].y = distance; 
-    this.points[1].y = distance;
-    this.points[3].y = distance - height;
-    this.points[2].y = distance - height;
-
-    this.attached = true;
-  }
-
-  moveRight(distance) {
-    const width = getWidth(this);
-
-    distance += 1;
-
-    this.points[0].x = distance;
-    this.points[3].x = distance;
-    this.points[1].x = (distance + width);
-    this.points[2].x = (distance + width);
-
-    this.attached = true;
-  }
-
-  moveLeft(distance) {
-    const width = getWidth(this);
-
-    distance -= 1;
-
-    this.points[1].x = distance; 
-    this.points[2].x = distance;
-    this.points[0].x = distance - width; 
-    this.points[3].x = distance - width;
-
-    this.attached = true;
   }
 }

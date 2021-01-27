@@ -3,7 +3,7 @@ import { connectingPoints } from '../helpers/ArrangeDotsHelper';
 import { getCoordinates } from '../helpers/ArrangeDotsHelper';
 import { initializeDots } from '../helpers/InitializePolygonHelper';
 import { initializeCorners } from '../helpers/InitializePolygonHelper';
-import Polygon from '../models/Polygon';
+import Rectangle from '../models/Rectangle';
 
 const INDENT = 350;
 
@@ -19,7 +19,7 @@ export default class PolygonService {
             const figure = getCoordinates(pointsOfPolygon, dots, indent);
             const staticPoints = JSON.parse(JSON.stringify(figure));
 
-            polygons.push(new Polygon(index, figure, staticPoints));
+            polygons.push(new Rectangle(index, figure, staticPoints));
 
             return indent += INDENT;
         }, 0)
